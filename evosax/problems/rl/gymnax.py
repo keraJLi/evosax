@@ -185,7 +185,8 @@ class GymnaxProblem(Problem):
                 mean, var_sum = jax.tree.map(_update_leaf, obs, mean, var_sum)
                 stats = (mean, var_sum)
 
-            return (obs, env_state, cum_reward + reward, done, t, stats)
+            cum_reward = cum_reward + reward
+            return (obs, env_state, cum_reward, done.astype(bool), t, stats)
 
         # Initialize per-rollout stats
         ph = jax.tree.map(lambda x: jnp.zeros_like(x), obs)

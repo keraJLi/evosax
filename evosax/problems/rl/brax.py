@@ -173,7 +173,8 @@ class BraxProblem(Problem):
                 mean, var_sum = jax.tree.map(_update_leaf, env_state.obs, mean, var_sum)
                 stats = (mean, var_sum)
 
-            return (env_state, cum_reward + state.reward, env_state.done, t, stats)
+            cum_reward = cum_reward + env_state.reward
+            return (env_state, cum_reward, env_state.done.astype(bool), t, stats)
 
         # Initialize per-rollout stats
         ph = jax.tree.map(lambda x: jnp.zeros_like(x), env_state.obs)
